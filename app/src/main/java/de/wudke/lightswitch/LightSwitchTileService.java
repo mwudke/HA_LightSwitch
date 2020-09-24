@@ -64,20 +64,40 @@ public class LightSwitchTileService extends TileService {
     }
 
     private void callHA(String mod, String endpoint, Callback callback){
-        OkHttpClient client = new OkHttpClient();
+        if (prefCheck()) {
+            OkHttpClient client = new OkHttpClient();
 
-        Request.Builder requestBuilder = new Request.Builder()
-                .url(HA_URL + endpoint)
-                .addHeader("Authorization", "Bearer " + HA_TOKEN)
-                .addHeader("Content-Type", "application/json");
+            Request.Builder requestBuilder = new Request.Builder()
+                    .url(HA_URL + endpoint)
+                    .addHeader("Authorization", "Bearer " + HA_TOKEN)
+                    .addHeader("Content-Type", "application/json");
 
-        switch (mod.toLowerCase()){
-            case "post": requestBuilder.post(RequestBody.create( "{\"entity_id\": \"light." + HA_ENTITY +"\"}", MediaType.parse("application/json"))); break;
-            default: requestBuilder.get(); break;
+            switch (mod.toLowerCase()) {
+                case "post":
+                    requestBuilder.post(RequestBody.create("{\"entity_id\": \"light." + HA_ENTITY + "\"}", MediaType.parse("application/json")));
+                    break;
+                default:
+                    requestBuilder.get();
+                    break;
+            }
+            final Request request = requestBuilder.build();
+
+            client.newCall(request).enqueue(callback);
+        } else {
+            Handler mainHandler = new Handler(getMainLooper());
+            mainHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getBaseContext(), getString(R.string.Pref_Error), Toast.LENGTH_LONG).show();
+                }
+            });
         }
-                final Request request = requestBuilder.build();
+    }
 
-        client.newCall(request).enqueue(callback);
+    private boolean prefCheck() {
+        return HA_URL != "" &&
+                HA_ENTITY != "" &&
+                HA_TOKEN != "";
     }
 
     private void callHAToggle() {

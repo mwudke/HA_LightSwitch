@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">HA - Light Switch</string>
     <string name="tile_name">Light Switch</string>
+    <string name="Pref_Error">ERROR: check config</string>
 </resources>
