@@ -27,9 +27,9 @@ public class MainActivity extends AppCompatActivity {
 
         sharedpreferences = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
 
-        String HA_TOKEN = sharedpreferences.getString("HA_TOKEN", "HA-Token");
-        String HA_URL = sharedpreferences.getString("HA_URL", "HA-URL");
-        String HA_ENTITY = sharedpreferences.getString("HA_ENTITY", "HA-ENTITY");
+        String HA_TOKEN = sharedpreferences.getString("HA_TOKEN", "");
+        String HA_URL = sharedpreferences.getString("HA_URL", "");
+        String HA_ENTITY = sharedpreferences.getString("HA_ENTITY", "");
 
 
         final EditText editText_HA_Token = findViewById(R.id.editText_HA_Token);
