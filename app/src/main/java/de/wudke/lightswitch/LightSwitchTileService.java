@@ -95,13 +95,18 @@ public class LightSwitchTileService extends TileService {
                     mainHandler.post(new Runnable() {
                         @Override
                         public void run() {
-                            // Do your stuff here related to UI, e.g. show toast
                             Toast.makeText(getBaseContext(), response.toString(), Toast.LENGTH_LONG).show();
                         }
                     });
 
                     throw new IOException("Unexpected code " + response);
                 } else {
+                    switch (getQsTile().getState()){
+                        case Tile.STATE_ACTIVE: getQsTile().setState(Tile.STATE_INACTIVE); break;
+                        case Tile.STATE_INACTIVE: getQsTile().setState(Tile.STATE_ACTIVE); break;
+                    }
+                    getQsTile().updateTile();
+
                     try {
                         Thread.sleep(100);
                     } catch (InterruptedException e) {e.printStackTrace();
