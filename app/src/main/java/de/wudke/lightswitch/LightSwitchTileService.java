@@ -2,16 +2,17 @@ package de.wudke.lightswitch;
 
 import android.content.SharedPreferences;
 import android.os.Handler;
-import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.service.quicksettings.Tile;
 import android.service.quicksettings.TileService;
 import android.widget.Toast;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Objects;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -23,7 +24,7 @@ import okhttp3.Response;
 
 public class LightSwitchTileService extends TileService {
 
-    SharedPreferences sharedpreferences;
+    private SharedPreferences sharedpreferences;
     private String HA_TOKEN;
     private String HA_URL;
     private String HA_ENTITY;
@@ -51,7 +52,7 @@ public class LightSwitchTileService extends TileService {
         sharedpreferences.unregisterOnSharedPreferenceChangeListener(listener);
     }
 
-    public void loadPref(){
+    private void loadPref(){
         HA_TOKEN = sharedpreferences.getString("HA_TOKEN", "null");
         HA_URL = sharedpreferences.getString("HA_URL", "null");
         HA_ENTITY = sharedpreferences.getString("HA_ENTITY", "null");
@@ -71,7 +72,7 @@ public class LightSwitchTileService extends TileService {
                 .addHeader("Content-Type", "application/json");
 
         switch (mod.toLowerCase()){
-            case "post": requestBuilder.post(RequestBody.create(MediaType.parse("application/json"), "{\"entity_id\": \"light." + HA_ENTITY +"\"}")); break;
+            case "post": requestBuilder.post(RequestBody.create( "{\"entity_id\": \"light." + HA_ENTITY +"\"}", MediaType.parse("application/json"))); break;
             default: requestBuilder.get(); break;
         }
                 final Request request = requestBuilder.build();
@@ -83,12 +84,12 @@ public class LightSwitchTileService extends TileService {
 
         Callback callback = new Callback() {
             @Override
-            public void onFailure(Call call, IOException e) {
+            public void onFailure(@NotNull Call call, IOException e) {
                 e.printStackTrace();
             }
 
             @Override
-            public void onResponse(Call call, final Response response) throws IOException {
+            public void onResponse(@NotNull Call call, final Response response) throws IOException {
                 if (!response.isSuccessful()) {
                     Handler mainHandler = new Handler(getMainLooper());
 
@@ -123,12 +124,12 @@ public class LightSwitchTileService extends TileService {
     private void callHAState() {
         Callback callback =  new Callback() {
             @Override
-            public void onFailure(Call call, IOException e) {
+            public void onFailure(@NotNull Call call, IOException e) {
                 e.printStackTrace();
             }
 
             @Override
-            public void onResponse(Call call, final Response response) throws IOException {
+            public void onResponse(@NotNull Call call, final Response response) throws IOException {
                 if (!response.isSuccessful()) {
                     Handler mainHandler = new Handler(getMainLooper());
 
@@ -142,9 +143,9 @@ public class LightSwitchTileService extends TileService {
 
                     throw new IOException("Unexpected code " + response);
                 } else {
-                    JSONObject mainObject = null;
+                    JSONObject mainObject;
                     try {
-                        mainObject = new JSONObject(response.body().string());
+                        mainObject = new JSONObject(Objects.requireNonNull(response.body()).string());
                         String newState = mainObject.getString("state");
 //                        System.out.println(newState);
 
