@@ -52,6 +52,12 @@ public class LightSwitchTileService extends TileService {
         sharedpreferences.unregisterOnSharedPreferenceChangeListener(listener);
     }
 
+    @Override
+    public void onStartListening() {
+        loadPref();
+        callHAState();
+    }
+
     private void loadPref(){
         HA_TOKEN = sharedpreferences.getString("HA_TOKEN", "null");
         HA_URL = sharedpreferences.getString("HA_URL", "null");
