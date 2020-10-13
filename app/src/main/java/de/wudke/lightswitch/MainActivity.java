@@ -1,6 +1,6 @@
 package de.wudke.lightswitch;
 
-import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -8,13 +8,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -52,6 +48,11 @@ public class MainActivity extends AppCompatActivity {
                         .apply();
             }
         });
+    }
+
+    public void debug(View view) {
+        Intent intent = new Intent(this, FloatControllsActivity.class);
+        startActivity(intent);
     }
 
 }
