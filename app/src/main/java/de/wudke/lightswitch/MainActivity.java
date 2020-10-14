@@ -10,7 +10,7 @@ import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import de.wudke.lightswitch.floatControls.FloatControlsActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void debug(View view) {
-        Intent intent = new Intent(this, FloatControllsActivity.class);
+        Intent intent = new Intent(this, FloatControlsActivity.class);
         startActivity(intent);
     }
 

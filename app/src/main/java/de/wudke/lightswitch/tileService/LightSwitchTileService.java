@@ -1,4 +1,4 @@
-package de.wudke.lightswitch;
+package de.wudke.lightswitch.tileService;
 
 import android.content.SharedPreferences;
 import android.os.Handler;
@@ -14,6 +14,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.Objects;
 
+import de.wudke.lightswitch.R;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;

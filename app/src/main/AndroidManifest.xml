@@ -14,7 +14,7 @@
         android:usesCleartextTraffic="true">
 
         <activity
-            android:name=".FloatControllsActivity"
+            android:name=".floatControls.FloatControlsActivity"
             android:theme="@style/Theme.Transparent"
             android:taskAffinity="de.wudke.lightswitch.floatControlls"
             android:excludeFromRecents="true">
@@ -33,7 +33,7 @@
         </activity>
 
         <service
-            android:name=".LightSwitchTileService"
+            android:name=".tileService.LightSwitchTileService"
             android:icon="@drawable/ic_lightbulb_outline_black_24dp"
             android:label="@string/tile_name"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
