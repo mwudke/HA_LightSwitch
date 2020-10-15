@@ -2,31 +2,19 @@ package de.wudke.lightswitch;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Handler;
 import android.preference.PreferenceManager;
-import android.service.quicksettings.Tile;
-import android.widget.Toast;
 
-import org.jetbrains.annotations.NotNull;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.util.Objects;
-
-import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
-import okhttp3.Response;
 
 public class HAUtils {
     private SharedPreferences sharedpreferences;
-    public String HA_TOKEN;
-    public String HA_URL;
-    public String HA_ENTITY;
+    private String HA_TOKEN;
+    private String HA_URL;
+    private String HA_ENTITY;
 
     public HAUtils(Context context) {
         sharedpreferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -40,9 +28,9 @@ public class HAUtils {
     }
 
     private boolean prefCheck() {
-        return HA_URL != "" &&
-                HA_ENTITY != "" &&
-                HA_TOKEN != "";
+        return !HA_URL.equals("") &&
+                !HA_ENTITY.equals("") &&
+                !HA_TOKEN.equals("");
     }
 
     public void toggleLight(Callback callback) {
