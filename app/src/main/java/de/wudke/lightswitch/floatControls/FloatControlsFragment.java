@@ -171,7 +171,7 @@ public class FloatControlsFragment extends Fragment {
             imageButton.setBackgroundTintList(Objects.requireNonNull(this.getContext()).getResources().getColorStateList(R.color.white, null));
             imageButton.setImageTintList(this.getContext().getResources().getColorStateList(R.color.black, null));
         } else {
-            imageButton.setBackgroundTintList(Objects.requireNonNull(this.getContext()).getResources().getColorStateList(R.color.black, null));
+            imageButton.setBackgroundTintList(Objects.requireNonNull(this.getContext()).getResources().getColorStateList(R.color.inactive, null));
             imageButton.setImageTintList(this.getContext().getResources().getColorStateList(R.color.white, null));
         }
 
