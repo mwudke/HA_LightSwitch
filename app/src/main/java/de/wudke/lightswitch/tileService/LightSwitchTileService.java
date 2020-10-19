@@ -1,8 +1,6 @@
 package de.wudke.lightswitch.tileService;
 
-import android.content.SharedPreferences;
 import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.service.quicksettings.Tile;
 import android.service.quicksettings.TileService;
 import android.widget.Toast;
@@ -14,55 +12,26 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.Objects;
 
-import de.wudke.lightswitch.R;
+import de.wudke.lightswitch.HAUtils;
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class LightSwitchTileService extends TileService {
 
-    private SharedPreferences sharedpreferences;
-    private String HA_TOKEN;
-    private String HA_URL;
-    private String HA_ENTITY;
-
     private int state = Tile.STATE_INACTIVE;
-    private SharedPreferences.OnSharedPreferenceChangeListener listener;
 
+    private HAUtils haUtils;
 
     @Override
     public void onCreate() {
-        sharedpreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
-            public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
-                loadPref();
-            }
-        };
-        sharedpreferences.registerOnSharedPreferenceChangeListener(listener);
-
-        loadPref();
+        haUtils = new HAUtils(getBaseContext());
         callHAState();
-    }
-
-    @Override
-    public void onDestroy(){
-        sharedpreferences.unregisterOnSharedPreferenceChangeListener(listener);
     }
 
     @Override
     public void onStartListening() {
-        loadPref();
         callHAState();
-    }
-
-    private void loadPref(){
-        HA_TOKEN = sharedpreferences.getString("HA_TOKEN", "null");
-        HA_URL = sharedpreferences.getString("HA_URL", "null");
-        HA_ENTITY = sharedpreferences.getString("HA_ENTITY", "null");
     }
 
     @Override
@@ -70,45 +39,7 @@ public class LightSwitchTileService extends TileService {
         callHAToggle();
     }
 
-    private void callHA(String mod, String endpoint, Callback callback){
-        if (prefCheck()) {
-            OkHttpClient client = new OkHttpClient();
-
-            Request.Builder requestBuilder = new Request.Builder()
-                    .url(HA_URL + endpoint)
-                    .addHeader("Authorization", "Bearer " + HA_TOKEN)
-                    .addHeader("Content-Type", "application/json");
-
-            switch (mod.toLowerCase()) {
-                case "post":
-                    requestBuilder.post(RequestBody.create("{\"entity_id\": \"light." + HA_ENTITY + "\"}", MediaType.parse("application/json")));
-                    break;
-                default:
-                    requestBuilder.get();
-                    break;
-            }
-            final Request request = requestBuilder.build();
-
-            client.newCall(request).enqueue(callback);
-        } else {
-            Handler mainHandler = new Handler(getMainLooper());
-            mainHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(getBaseContext(), getString(R.string.Pref_Error), Toast.LENGTH_LONG).show();
-                }
-            });
-        }
-    }
-
-    private boolean prefCheck() {
-        return HA_URL != "" &&
-                HA_ENTITY != "" &&
-                HA_TOKEN != "";
-    }
-
     private void callHAToggle() {
-
         Callback callback = new Callback() {
             @Override
             public void onFailure(@NotNull Call call, IOException e) {
@@ -145,7 +76,7 @@ public class LightSwitchTileService extends TileService {
             }
         };
 
-        callHA("POST", "/api/services/light/toggle", callback);
+        haUtils.toggleLight(callback);
     }
 
     private void callHAState() {
@@ -176,9 +107,10 @@ public class LightSwitchTileService extends TileService {
                         String newState = mainObject.getString("state");
 //                        System.out.println(newState);
 
-                        switch (newState){
-                            case "on": state = Tile.STATE_ACTIVE; break;
-                            default: state = Tile.STATE_INACTIVE; break;
+                        if ("on".equals(newState)) {
+                            state = Tile.STATE_ACTIVE;
+                        } else {
+                            state = Tile.STATE_INACTIVE;
                         }
 
                         getQsTile().setState(state);
@@ -193,6 +125,6 @@ public class LightSwitchTileService extends TileService {
             }
         };
 
-        callHA("GET", "/api/states/light." + HA_ENTITY, callback);
+        haUtils.getLightState(callback);
     }
 }
