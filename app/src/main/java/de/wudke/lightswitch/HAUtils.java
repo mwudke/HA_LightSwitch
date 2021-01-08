@@ -71,6 +71,25 @@ public class HAUtils {
         }
     }
 
+    public void getAllStates(Callback callback) {
+        System.out.println("getAllStates");
+
+        if (prefCheck()) {
+            OkHttpClient client = new OkHttpClient();
+
+            final Request request = new Request.Builder()
+                    .url(HA_URL + "/api/states")
+                    .addHeader("Authorization", "Bearer " + HA_TOKEN)
+                    .addHeader("Content-Type", "application/json")
+                    .get()
+                    .build();
+
+            client.newCall(request).enqueue(callback);
+        } else {
+            throw new IllegalArgumentException();
+        }
+    }
+
     public void setLightBrightness(int brightness, Callback callback) {
         System.out.println("setLightBrightness: " + brightness);
 

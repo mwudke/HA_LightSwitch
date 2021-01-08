@@ -2,11 +2,13 @@ package de.wudke.lightswitch.floatControls;
 
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,6 +26,8 @@ import de.wudke.lightswitch.R;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
+
+import static android.os.Looper.getMainLooper;
 
 public class FloatControlsFragment extends Fragment {
 
@@ -93,6 +97,14 @@ public class FloatControlsFragment extends Fragment {
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (lightState) {
+                    lightState = false;
+                    brightness = 0;
+                } else {
+                    lightState = true;
+                }
+                setUIState();
+
                 Callback callback = new Callback() {
                     @Override
                     public void onFailure(@NotNull Call call, IOException e) {
@@ -104,11 +116,8 @@ public class FloatControlsFragment extends Fragment {
                         if (!response.isSuccessful()) {
                             throw new IOException("Unexpected code " + response);
                         } else {
-                            lightState = !lightState;
-                            setUIState();
-
                             try {
-                                Thread.sleep(100);
+                                Thread.sleep(200);
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
@@ -134,6 +143,15 @@ public class FloatControlsFragment extends Fragment {
             @Override
             public void onResponse(@NotNull Call call, @NotNull final Response response) throws IOException {
                 if (!response.isSuccessful()) {
+                    Handler mainHandler = new Handler(getMainLooper());
+
+                    mainHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getContext(), response.toString(), Toast.LENGTH_LONG).show();
+                        }
+                    });
+
                     throw new IOException("Unexpected code " + response);
                 } else {
                     try {

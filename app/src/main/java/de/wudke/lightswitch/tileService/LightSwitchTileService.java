@@ -36,6 +36,16 @@ public class LightSwitchTileService extends TileService {
 
     @Override
     public void onClick() {
+        switch (getQsTile().getState()) {
+            case Tile.STATE_ACTIVE:
+                getQsTile().setState(Tile.STATE_INACTIVE);
+                break;
+            case Tile.STATE_INACTIVE:
+                getQsTile().setState(Tile.STATE_ACTIVE);
+                break;
+        }
+        getQsTile().updateTile();
+
         callHAToggle();
     }
 
@@ -60,22 +70,16 @@ public class LightSwitchTileService extends TileService {
 
                     throw new IOException("Unexpected code " + response);
                 } else {
-                    switch (getQsTile().getState()){
-                        case Tile.STATE_ACTIVE: getQsTile().setState(Tile.STATE_INACTIVE); break;
-                        case Tile.STATE_INACTIVE: getQsTile().setState(Tile.STATE_ACTIVE); break;
-                    }
-                    getQsTile().updateTile();
-
                     try {
-                        Thread.sleep(100);
+                        Thread.sleep(200);
                     } catch (InterruptedException e) {e.printStackTrace();
 
                     }
+
                     callHAState();
                 }
             }
         };
-
         haUtils.toggleLight(callback);
     }
 
