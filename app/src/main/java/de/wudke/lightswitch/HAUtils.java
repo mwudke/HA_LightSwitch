@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import de.wudke.lightswitch.entity.*;
 import okhttp3.Callback;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -52,6 +53,25 @@ public class HAUtils {
         }
     }
 
+    public void toggleLight(LightEntity light, Callback callback) {
+        System.out.println("toggleLight: " + light.getEntityID());
+
+        if (prefCheck()) {
+            OkHttpClient client = new OkHttpClient();
+
+            final Request request = new Request.Builder()
+                    .url(HA_URL + "/api/services/light/toggle")
+                    .addHeader("Authorization", "Bearer " + HA_TOKEN)
+                    .addHeader("Content-Type", "application/json")
+                    .post(RequestBody.create("{\"entity_id\": \"" + light.getEntityID() + "\"}", MediaType.parse("application/json")))
+                    .build();
+
+            client.newCall(request).enqueue(callback);
+        } else {
+            throw new IllegalArgumentException();
+        }
+    }
+
     public void getLightState(Callback callback) {
         System.out.println("getLightState");
 
@@ -60,6 +80,25 @@ public class HAUtils {
 
             final Request request = new Request.Builder()
                     .url(HA_URL + "/api/states/light." + HA_ENTITY)
+                    .addHeader("Authorization", "Bearer " + HA_TOKEN)
+                    .addHeader("Content-Type", "application/json")
+                    .get()
+                    .build();
+
+            client.newCall(request).enqueue(callback);
+        } else {
+            throw new IllegalArgumentException();
+        }
+    }
+
+    public void getState(Entity entity, Callback callback) {
+        System.out.println("getLightState: " + entity.getEntityID());
+
+        if (prefCheck()) {
+            OkHttpClient client = new OkHttpClient();
+
+            final Request request = new Request.Builder()
+                    .url(HA_URL + "/api/states/" + entity.getEntityID())
                     .addHeader("Authorization", "Bearer " + HA_TOKEN)
                     .addHeader("Content-Type", "application/json")
                     .get()
@@ -101,6 +140,25 @@ public class HAUtils {
                     .addHeader("Authorization", "Bearer " + HA_TOKEN)
                     .addHeader("Content-Type", "application/json")
                     .post(RequestBody.create("{\"entity_id\": \"light." + HA_ENTITY + "\",\"brightness\": " + brightness + "}", MediaType.parse("application/json")))
+                    .build();
+
+            client.newCall(request).enqueue(callback);
+        } else {
+            throw new IllegalArgumentException();
+        }
+    }
+
+    public void setScene(SceneEntity scene, Callback callback) {
+        System.out.println("setScene: " + scene.getEntityID());
+
+        if (prefCheck()) {
+            OkHttpClient client = new OkHttpClient();
+
+            final Request request = new Request.Builder()
+                    .url(HA_URL + "/api/services/scene/turn_on")
+                    .addHeader("Authorization", "Bearer " + HA_TOKEN)
+                    .addHeader("Content-Type", "application/json")
+                    .post(RequestBody.create("{\"entity_id\": \"" + scene.getEntityID() + "\" }", MediaType.parse("application/json")))
                     .build();
 
             client.newCall(request).enqueue(callback);

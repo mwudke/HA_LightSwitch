@@ -2,4 +2,7 @@
     <string name="app_name">HA - Light Switch</string>
     <string name="tile_name">Light Switch</string>
     <string name="Pref_Error">ERROR: check config</string>
+    <string name="floatcontrols_toggle_light_description">toggle Light</string>
+    <string name="floatcontrols_open_settings_descriptiongoto_settings">open app settings</string>
+    <string name="active_entity">active entity:</string>
 </resources>

@@ -11,7 +11,7 @@
     tools:context=".floatControls.FloatControlsFragment">
 
     <ImageButton
-        android:id="@+id/imageButton"
+        android:id="@+id/imageButton_toggle_light"
         style="@style/Widget.AppCompat.ImageButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -37,9 +37,9 @@
         android:progress="1"
         android:progressTint="@color/white"
         android:thumb="@drawable/ic_brightness_low_white_24dp"
-        app:layout_constraintBottom_toBottomOf="@+id/imageButton"
+        app:layout_constraintBottom_toBottomOf="@+id/imageButton_toggle_light"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/imageButton"
-        app:layout_constraintTop_toTopOf="@+id/imageButton" />
+        app:layout_constraintStart_toEndOf="@+id/imageButton_toggle_light"
+        app:layout_constraintTop_toTopOf="@+id/imageButton_toggle_light" />
 </androidx.constraintlayout.widget.ConstraintLayout>

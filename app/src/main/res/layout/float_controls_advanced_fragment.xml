@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/AppTheme"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/float_controls_advanced_background"
+    android:backgroundTint="@android:color/background_dark"
+    android:padding="10dp"
+    tools:context=".floatControls.FloatControlsFragment">
+
+    <ImageButton
+        android:id="@+id/imageButton_toggle_light"
+        style="@style/Widget.AppCompat.ImageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/round_button"
+        android:backgroundTint="#FFFFFF"
+        android:contentDescription="@string/floatcontrols_toggle_light_description"
+        android:longClickable="true"
+        android:padding="12dp"
+        android:src="@drawable/ic_lightbulb_outline_black_24dp"
+        android:tint="#000000"
+        app:layout_constraintEnd_toStartOf="@+id/brightness_seekBar"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_entity_lable" />
+
+    <ImageButton
+        android:id="@+id/imageButton_open_ha"
+        style="@style/Widget.AppCompat.ImageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/round_button"
+        android:backgroundTint="#FFFFFF"
+        android:contentDescription="@string/floatcontrols_open_settings_descriptiongoto_settings"
+        android:longClickable="false"
+        android:padding="12dp"
+        android:src="@drawable/ic_home_assistant"
+        android:tint="#000000"
+        app:layout_constraintBottom_toBottomOf="@+id/imageButton_open_settings"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/imageButton_open_settings"
+        app:layout_constraintTop_toTopOf="@+id/imageButton_open_settings" />
+
+    <ImageButton
+        android:id="@+id/imageButton_open_settings"
+        style="@style/Widget.AppCompat.ImageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/round_button"
+        android:backgroundTint="#FFFFFF"
+        android:contentDescription="@string/floatcontrols_open_settings_descriptiongoto_settings"
+        android:longClickable="false"
+        android:padding="12dp"
+        android:src="@drawable/ic_baseline_settings_24"
+        android:tint="#000000"
+        app:layout_constraintEnd_toStartOf="@+id/imageButton_open_ha"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recyclerView_quickActions" />
+
+    <SeekBar
+        android:id="@+id/brightness_seekBar"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:indeterminate="false"
+        android:max="254"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
+        android:progress="1"
+        android:progressTint="@color/white"
+        android:thumb="@drawable/ic_brightness_low_white_24dp"
+        app:layout_constraintBottom_toBottomOf="@+id/imageButton_toggle_light"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/imageButton_toggle_light"
+        app:layout_constraintTop_toTopOf="@+id/imageButton_toggle_light" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView_quickActions"
+        android:layout_width="0dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/float_controls_background"
+        android:backgroundTint="@color/white"
+        app:layout_constraintEnd_toEndOf="@+id/brightness_seekBar"
+        app:layout_constraintStart_toStartOf="@+id/imageButton_toggle_light"
+        app:layout_constraintTop_toBottomOf="@+id/brightness_seekBar" />
+
+    <TextView
+        android:id="@+id/textView_entity_lable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/active_entity"
+        android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toTopOf="@+id/imageButton_toggle_light"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

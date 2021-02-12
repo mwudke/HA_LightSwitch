@@ -1,18 +1,23 @@
 package de.wudke.lightswitch.floatControls;
 
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
@@ -29,21 +34,24 @@ import okhttp3.Response;
 
 import static android.os.Looper.getMainLooper;
 
-public class FloatControlsFragment extends Fragment {
+public class FloatControlsAdvancedFragment extends Fragment {
 
     private HAUtils haUtils;
     private boolean lightState = false;
     private int brightness = 0;
+    private SharedPreferences sharedpreferences;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.float_controls_fragment, container, false);
+        return inflater.inflate(R.layout.float_controls_advanced_fragment, container, false);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        sharedpreferences = PreferenceManager.getDefaultSharedPreferences(this.getContext());
 
         haUtils = new HAUtils(this.getContext());
 
@@ -93,8 +101,8 @@ public class FloatControlsFragment extends Fragment {
             }
         });
 
-        final ImageButton imageButton = getView().findViewById(R.id.imageButton_toggle_light);
-        imageButton.setOnClickListener(new View.OnClickListener() {
+        final ImageButton imageButtonToggleLight = getView().findViewById(R.id.imageButton_toggle_light);
+        imageButtonToggleLight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (lightState) {
@@ -129,6 +137,14 @@ public class FloatControlsFragment extends Fragment {
                 haUtils.toggleLight(callback);
             }
         });
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this.getContext(), LinearLayoutManager.HORIZONTAL, false);
+
+        RecyclerView recyclerViewQuickActions = (RecyclerView) getView().findViewById(R.id.recyclerView_quickActions);
+        recyclerViewQuickActions.setLayoutManager(layoutManager);
+
+        TextView entityLable = getView().findViewById(R.id.textView_entity_lable);
+        entityLable.setText(sharedpreferences.getString("HA_ENTITY", ""));
 
         updateLightState();
     }
