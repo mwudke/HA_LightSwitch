@@ -92,7 +92,7 @@ public class HAUtils {
     }
 
     public void getState(Entity entity, Callback callback) {
-        System.out.println("getLightState: " + entity.getEntityID());
+        System.out.println("getState: " + entity.getEntityID());
 
         if (prefCheck()) {
             OkHttpClient client = new OkHttpClient();

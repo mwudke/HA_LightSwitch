@@ -13,6 +13,7 @@
     <ImageButton
         android:id="@+id/imageButton_toggle_light"
         style="@style/Widget.AppCompat.ImageButton"
+        android:foreground="@drawable/ripple_btn_background"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -31,6 +32,7 @@
     <ImageButton
         android:id="@+id/imageButton_open_ha"
         style="@style/Widget.AppCompat.ImageButton"
+        android:foreground="@drawable/ripple_btn_background"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/round_button"
@@ -49,6 +51,7 @@
     <ImageButton
         android:id="@+id/imageButton_open_settings"
         style="@style/Widget.AppCompat.ImageButton"
+        android:foreground="@drawable/ripple_btn_background"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -84,10 +87,9 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView_quickActions"
         android:layout_width="0dp"
-        android:layout_height="64dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:background="@drawable/float_controls_background"
-        android:backgroundTint="@color/white"
+        android:backgroundTint="@color/cardview_dark_background"
         app:layout_constraintEnd_toEndOf="@+id/brightness_seekBar"
         app:layout_constraintStart_toStartOf="@+id/imageButton_toggle_light"
         app:layout_constraintTop_toBottomOf="@+id/brightness_seekBar" />

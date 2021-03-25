@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingTop="3dp"
+    android:paddingRight="12dp"
+    android:paddingBottom="3dp">
+
+    <ImageButton
+        android:id="@+id/imageButton_qa_scene"
+        android:foreground="@drawable/ripple_btn_background"
+        style="@style/Widget.AppCompat.ImageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:background="@drawable/round_button"
+        android:backgroundTint="#FFFFFF"
+        android:contentDescription="@string/floatcontrols_toggle_scene_description"
+        android:longClickable="true"
+        android:padding="12dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_baseline_movie_24"
+        android:tint="#000000" />
+
+    <TextView
+        android:id="@+id/textView_qa_scene"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="marquee"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:scrollHorizontally="true"
+        android:singleLine="true"
+        android:textAlignment="center"
+        android:textSize="12sp"
+        tools:text="ddddddddddddddddddd" />
+</LinearLayout>

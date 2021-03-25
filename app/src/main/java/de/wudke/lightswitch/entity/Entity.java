@@ -1,20 +1,34 @@
 package de.wudke.lightswitch.entity;
 
 import android.content.Context;
+import android.os.Handler;
+import android.preference.PreferenceManager;
+import android.widget.Toast;
 
+import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Objects;
+
+import de.wudke.lightswitch.HAUtils;
+import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.Response;
 
-public class Entity {
+import static android.os.Looper.getMainLooper;
+
+public abstract class Entity {
     public String entityID, state, friendlyName;
 
     public Entity(String entityID) {
         this.entityID = entityID;
     }
 
-    public void QuickAction(Context context, Callback callback) {
-    }
-
-    ;
+    public abstract void QuickAction(Context context, Callback callback);
 
     public String getEntityID() {
         return entityID;

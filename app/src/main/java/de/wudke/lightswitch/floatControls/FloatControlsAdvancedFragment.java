@@ -1,6 +1,7 @@
 package de.wudke.lightswitch.floatControls;
 
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -16,18 +17,22 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Objects;
 
 import de.wudke.lightswitch.HAUtils;
 import de.wudke.lightswitch.R;
+import de.wudke.lightswitch.entity.SceneEntity;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -40,6 +45,9 @@ public class FloatControlsAdvancedFragment extends Fragment {
     private boolean lightState = false;
     private int brightness = 0;
     private SharedPreferences sharedpreferences;
+
+    ScenesAdapter scenesAdapter;
+    private ArrayList<SceneEntity> scenes;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -54,6 +62,16 @@ public class FloatControlsAdvancedFragment extends Fragment {
         sharedpreferences = PreferenceManager.getDefaultSharedPreferences(this.getContext());
 
         haUtils = new HAUtils(this.getContext());
+
+
+        this.scenes = new ArrayList<>();
+        RecyclerView recyclerView = Objects.requireNonNull(getView()).findViewById(R.id.recyclerView_quickActions);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        scenesAdapter = new ScenesAdapter(this.getContext(), this.scenes);
+//        scenesAdapter.setClickListener(this);
+        recyclerView.setAdapter(scenesAdapter);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        updateSceneEntityList();
 
 
         final SeekBar brightnessSeekBar = Objects.requireNonNull(getView()).findViewById(R.id.brightness_seekBar);
@@ -213,4 +231,49 @@ public class FloatControlsAdvancedFragment extends Fragment {
         brightnessSeekBar.setProgress(brightness);
     }
 
+    public void updateSceneEntityList() {
+
+        Callback callback = new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull final Response response) throws IOException {
+                if (!response.isSuccessful()) {
+                    throw new IOException("Unexpected code " + response);
+                } else {
+                    try {
+                        JSONArray jEntityArray = new JSONArray(Objects.requireNonNull(response.body()).string());
+                        for (int i = 0; i < jEntityArray.length(); i++) {
+                            JSONObject jEntity = jEntityArray.getJSONObject(i);
+
+                            String entityID = jEntity.getString("entity_id");
+                            String entityFriendlyName = jEntity.getJSONObject("attributes").getString("friendly_name");
+
+                            if (entityID.startsWith("scene.")) {
+                                scenes.add(new SceneEntity(entityID, entityFriendlyName));
+                            }
+                        }
+
+                        new Handler(getMainLooper()).post(new Runnable() {
+                            public void run() {
+                                FloatControlsAdvancedFragment.this.scenesAdapter.notifyDataSetChanged();
+//                                AndroidBasicThreadActivity.textView.setText("Hello!! Android Team :-) From child thread.");
+                            }
+                        });
+
+
+//                        scenesAdapter.notifyDataSetChanged();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        };
+
+        haUtils.getAllStates(callback);
+
+    }
 }
