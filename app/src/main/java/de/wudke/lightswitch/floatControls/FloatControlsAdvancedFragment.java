@@ -2,7 +2,9 @@ package de.wudke.lightswitch.floatControls;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -19,7 +21,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SnapHelper;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -31,6 +35,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 import de.wudke.lightswitch.HAUtils;
+import de.wudke.lightswitch.MainActivity;
 import de.wudke.lightswitch.R;
 import de.wudke.lightswitch.entity.SceneEntity;
 import okhttp3.Call;
@@ -68,10 +73,11 @@ public class FloatControlsAdvancedFragment extends Fragment {
         RecyclerView recyclerView = Objects.requireNonNull(getView()).findViewById(R.id.recyclerView_quickActions);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
         scenesAdapter = new ScenesAdapter(this.getContext(), this.scenes);
-//        scenesAdapter.setClickListener(this);
         recyclerView.setAdapter(scenesAdapter);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         updateSceneEntityList();
+        SnapHelper snapHelper = new LinearSnapHelper();
+        snapHelper.attachToRecyclerView(recyclerView);
 
 
         final SeekBar brightnessSeekBar = Objects.requireNonNull(getView()).findViewById(R.id.brightness_seekBar);
@@ -153,6 +159,30 @@ public class FloatControlsAdvancedFragment extends Fragment {
                 };
 
                 haUtils.toggleLight(callback);
+            }
+        });
+
+        final ImageButton imageButtonOpenSettings = getView().findViewById(R.id.imageButton_open_settings);
+        imageButtonOpenSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), MainActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        final ImageButton imageButtonOpenHA = getView().findViewById(R.id.imageButton_open_ha);
+        imageButtonOpenHA.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent launchIntent = getContext().getPackageManager().getLaunchIntentForPackage("io.homeassistant.companion.android");
+                if (launchIntent != null) {
+                    startActivity(launchIntent);
+                } else {
+                    Uri webpage = Uri.parse(sharedpreferences.getString("HA_URL", ""));
+                    Intent webIntent = new Intent(Intent.ACTION_VIEW, webpage);
+                    startActivity(webIntent);
+                }
             }
         });
 

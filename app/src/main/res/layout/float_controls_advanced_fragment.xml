@@ -90,6 +90,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:backgroundTint="@color/cardview_dark_background"
+        android:requiresFadingEdge="none"
+        android:scrollbarThumbVertical="@android:color/darker_gray"
+        android:scrollbars="horizontal"
         app:layout_constraintEnd_toEndOf="@+id/brightness_seekBar"
         app:layout_constraintStart_toStartOf="@+id/imageButton_toggle_light"
         app:layout_constraintTop_toBottomOf="@+id/brightness_seekBar" />
