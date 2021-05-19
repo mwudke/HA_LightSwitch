@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingStart="0dp"
+    android:paddingTop="3dp"
+    android:paddingEnd="10dp"
+    android:paddingBottom="3dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        style="@style/Widget.AppCompat.ImageButton"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/float_controls_advanced_background"
+        android:backgroundTint="@color/inactive">
+
+        <TextView
+            android:id="@+id/textView_qa_scene"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="46dp"
+            android:ellipsize="marquee"
+            android:fadingEdge="horizontal"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:minWidth="30sp"
+            android:paddingStart="0dp"
+            android:paddingEnd="12dp"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
+            android:textAlignment="textStart"
+            android:textColor="@android:color/primary_text_dark"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/imageButton_qa_scene"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:adjustViewBounds="true"
+            android:background="@drawable/round_button"
+            android:backgroundTint="@android:color/transparent"
+            android:contentDescription="@string/floatcontrols_toggle_scene_description"
+            android:foreground="@drawable/ripple_btn_background"
+            android:longClickable="true"
+            android:padding="12dp"
+            android:scaleType="fitStart"
+            android:src="@drawable/ic_baseline_movie_24"
+            android:tint="#FFFFFF"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

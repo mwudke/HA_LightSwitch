@@ -16,6 +16,8 @@ import java.util.List;
 
 import de.wudke.lightswitch.HAUtils;
 import de.wudke.lightswitch.R;
+import de.wudke.lightswitch.entity.Entity;
+import de.wudke.lightswitch.entity.LightEntity;
 import de.wudke.lightswitch.entity.SceneEntity;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -24,14 +26,14 @@ import okhttp3.Response;
 
 class ScenesAdapter extends RecyclerView.Adapter<ScenesAdapter.ViewHolder> {
 
-    private List<SceneEntity> mData;
+    private List<Entity> mData;
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
     private Context context;
     private HAUtils haUtils;
 
     // data is passed into the constructor
-    ScenesAdapter(Context context, List<SceneEntity> data) {
+    ScenesAdapter(Context context, List<Entity> data) {
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
         this.context = context;
@@ -42,39 +44,53 @@ class ScenesAdapter extends RecyclerView.Adapter<ScenesAdapter.ViewHolder> {
     // inflates the row layout from xml when needed
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = mInflater.inflate(R.layout.item_quickaction_scene, parent, false);
+        View view = mInflater.inflate(R.layout.item_quickaction, parent, false);
         return new ViewHolder(view);
     }
 
     // binds the data to the TextView in each row
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        final SceneEntity sceneEntity = mData.get(position);
-        holder.myTextView.setText(sceneEntity.friendlyName);
-        holder.myImageButton.setOnClickListener(new View.OnClickListener() {
+        final Entity entity = mData.get(position);
+        holder.myTextView.setText(entity.friendlyName);
+
+        final Callback callback = new Callback() {
             @Override
-            public void onClick(View v) {
-
-                Callback callback = new Callback() {
-                    @Override
-                    public void onFailure(@NotNull Call call, IOException e) {
-                        e.printStackTrace();
-                    }
-
-                    @Override
-                    public void onResponse(@NotNull Call call, final Response response) throws IOException {
-                        if (!response.isSuccessful()) {
-                            throw new IOException("Unexpected code " + response);
-                        } else {
-
-                        }
-                    }
-                };
-
-                haUtils.setScene(sceneEntity, callback);
+            public void onFailure(@NotNull Call call, IOException e) {
+                e.printStackTrace();
             }
-        });
-//        holder.myImageButton.setImageResource(R.drawable.ic_home_assistant);
+
+            @Override
+            public void onResponse(@NotNull Call call, final Response response) throws IOException {
+                if (!response.isSuccessful()) {
+                    throw new IOException("Unexpected code " + response);
+                } else {
+
+                }
+            }
+        };
+
+        if (entity.getClass().isAssignableFrom(SceneEntity.class)) {
+            holder.myImageButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    haUtils.setScene((SceneEntity) entity, callback);
+                }
+            });
+
+            holder.myImageButton.setImageResource(R.drawable.ic_baseline_movie_24);
+
+        } else if (entity.getClass().isAssignableFrom(LightEntity.class)) {
+            holder.myImageButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    haUtils.toggleLight((LightEntity) entity, callback);
+                }
+            });
+
+            holder.myImageButton.setImageResource(R.drawable.ic_lightbulb_outline_black_24dp);
+        }
+
     }
 
     // total number of rows
