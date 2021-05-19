@@ -1,8 +1,6 @@
 package de.wudke.lightswitch.entity;
 
 import android.content.Context;
-import android.os.Handler;
-import android.widget.Toast;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -18,7 +16,6 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-import static android.os.Looper.getMainLooper;
 
 public class SceneEntity extends Entity {
 
@@ -32,4 +29,5 @@ public class SceneEntity extends Entity {
         HAUtils haUtils = new HAUtils(context);
         haUtils.setScene(this, callback);
     }
+
 }

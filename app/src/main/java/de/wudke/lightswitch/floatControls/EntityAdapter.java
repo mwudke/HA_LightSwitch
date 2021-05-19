@@ -19,12 +19,13 @@ import de.wudke.lightswitch.R;
 import de.wudke.lightswitch.entity.Entity;
 import de.wudke.lightswitch.entity.LightEntity;
 import de.wudke.lightswitch.entity.SceneEntity;
+import de.wudke.lightswitch.entity.SwitchEntity;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
 
-class ScenesAdapter extends RecyclerView.Adapter<ScenesAdapter.ViewHolder> {
+class EntityAdapter extends RecyclerView.Adapter<EntityAdapter.ViewHolder> {
 
     private List<Entity> mData;
     private LayoutInflater mInflater;
@@ -33,7 +34,7 @@ class ScenesAdapter extends RecyclerView.Adapter<ScenesAdapter.ViewHolder> {
     private HAUtils haUtils;
 
     // data is passed into the constructor
-    ScenesAdapter(Context context, List<Entity> data) {
+    EntityAdapter(Context context, List<Entity> data) {
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
         this.context = context;
@@ -89,6 +90,16 @@ class ScenesAdapter extends RecyclerView.Adapter<ScenesAdapter.ViewHolder> {
             });
 
             holder.myImageButton.setImageResource(R.drawable.ic_lightbulb_outline_black_24dp);
+
+        } else if (entity.getClass().isAssignableFrom(SwitchEntity.class)) {
+            holder.myImageButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    entity.QuickAction(context, callback);
+                }
+            });
+
+            holder.myImageButton.setImageResource(R.drawable.ic_baseline_flash_on_24);
         }
 
     }

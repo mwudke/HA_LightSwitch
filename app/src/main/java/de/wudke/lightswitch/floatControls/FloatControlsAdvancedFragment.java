@@ -1,6 +1,7 @@
 package de.wudke.lightswitch.floatControls;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,7 +38,10 @@ import java.util.Objects;
 import de.wudke.lightswitch.HAUtils;
 import de.wudke.lightswitch.MainActivity;
 import de.wudke.lightswitch.R;
+import de.wudke.lightswitch.entity.Entity;
+import de.wudke.lightswitch.entity.LightEntity;
 import de.wudke.lightswitch.entity.SceneEntity;
+import de.wudke.lightswitch.entity.SwitchEntity;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -52,8 +57,8 @@ public class FloatControlsAdvancedFragment extends Fragment {
     private int brightness = 0;
     private SharedPreferences sharedpreferences;
 
-    ScenesAdapter scenesAdapter;
-    private ArrayList<SceneEntity> scenes;
+    EntityAdapter entityAdapter;
+    private ArrayList<Entity> entities;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -71,13 +76,13 @@ public class FloatControlsAdvancedFragment extends Fragment {
 
 
         //TODO: also add other lights
-        this.scenes = new ArrayList<>();
+        this.entities = new ArrayList<>();
         RecyclerView recyclerView = Objects.requireNonNull(getView()).findViewById(R.id.recyclerView_quickActions);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
-        scenesAdapter = new ScenesAdapter(this.getContext(), this.scenes);
-        recyclerView.setAdapter(scenesAdapter);
+        entityAdapter = new EntityAdapter(this.getContext(), this.entities);
+        recyclerView.setAdapter(entityAdapter);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        updateSceneEntityList();
+        updateEntityList();
         SnapHelper snapHelper = new LinearSnapHelper();
         snapHelper.attachToRecyclerView(recyclerView);
 
@@ -263,7 +268,12 @@ public class FloatControlsAdvancedFragment extends Fragment {
         brightnessSeekBar.setProgress(brightness);
     }
 
-    public void updateSceneEntityList() {
+    public void updateEntityList() {
+
+        entities.clear();
+//        getLightEntityList(this.getContext());
+//        getSceneEntityList(this.getContext());
+
 
         Callback callback = new Callback() {
             @Override
@@ -274,38 +284,71 @@ public class FloatControlsAdvancedFragment extends Fragment {
             @Override
             public void onResponse(@NotNull Call call, @NotNull final Response response) throws IOException {
                 if (!response.isSuccessful()) {
+                    Handler mainHandler = new Handler(getMainLooper());
+
+                    mainHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getContext(), response.toString(), Toast.LENGTH_LONG).show();
+                        }
+                    });
+
                     throw new IOException("Unexpected code " + response);
                 } else {
                     try {
+                        ArrayList<Entity> LightEntities = new ArrayList<>();
+                        ArrayList<Entity> SceneEntities = new ArrayList<>();
+                        ArrayList<Entity> SwitchEntities = new ArrayList<>();
+
                         JSONArray jEntityArray = new JSONArray(Objects.requireNonNull(response.body()).string());
                         for (int i = 0; i < jEntityArray.length(); i++) {
+
                             JSONObject jEntity = jEntityArray.getJSONObject(i);
 
                             String entityID = jEntity.getString("entity_id");
-                            String entityFriendlyName = jEntity.getJSONObject("attributes").getString("friendly_name");
 
-                            if (entityID.startsWith("scene.")) {
-                                scenes.add(new SceneEntity(entityID, entityFriendlyName));
+
+                            if (entityID.startsWith("light.")) {
+                                String entityState = jEntity.getString("state");
+                                String entityFriendlyName = jEntity.getJSONObject("attributes").getString("friendly_name");
+
+                                int brightness = 0;
+
+                                if ("on".equals(entityState)) {
+                                    brightness = jEntity.getJSONObject("attributes").getInt("brightness");
+                                }
+
+                                LightEntities.add(new LightEntity(entityID, entityState, entityFriendlyName, brightness));
+
+                            } else if (entityID.startsWith("scene.")) {
+                                String entityFriendlyName = jEntity.getJSONObject("attributes").getString("friendly_name");
+                                SceneEntities.add(new SceneEntity(entityID, entityFriendlyName));
+
+                            } else if (entityID.startsWith("switch.")) {
+                                String entityFriendlyName = jEntity.getJSONObject("attributes").getString("friendly_name");
+                                String entityState = jEntity.getString("state");
+                                SwitchEntities.add(new SwitchEntity(entityID, entityState, entityFriendlyName));
                             }
                         }
 
+                        entities.addAll(SceneEntities);
+                        entities.addAll(LightEntities);
+                        entities.addAll(SwitchEntities);
                         new Handler(getMainLooper()).post(new Runnable() {
                             public void run() {
-                                FloatControlsAdvancedFragment.this.scenesAdapter.notifyDataSetChanged();
+                                FloatControlsAdvancedFragment.this.entityAdapter.notifyDataSetChanged();
 //                                AndroidBasicThreadActivity.textView.setText("Hello!! Android Team :-) From child thread.");
                             }
                         });
 
-
-//                        scenesAdapter.notifyDataSetChanged();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+
                 }
             }
         };
 
         haUtils.getAllStates(callback);
-
     }
 }

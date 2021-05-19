@@ -167,4 +167,23 @@ public class HAUtils {
         }
     }
 
+    public void toggleSwitch(SwitchEntity entity, Callback callback) {
+        System.out.println("toggleSwitch: " + entity.getEntityID());
+
+        if (prefCheck()) {
+            OkHttpClient client = new OkHttpClient();
+
+            final Request request = new Request.Builder()
+                    .url(HA_URL + "/api/services/switch/toggle")
+                    .addHeader("Authorization", "Bearer " + HA_TOKEN)
+                    .addHeader("Content-Type", "application/json")
+                    .post(RequestBody.create("{\"entity_id\": \"" + entity.getEntityID() + "\"}", MediaType.parse("application/json")))
+                    .build();
+
+            client.newCall(request).enqueue(callback);
+        } else {
+            throw new IllegalArgumentException();
+        }
+    }
+
 }
