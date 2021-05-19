@@ -50,6 +50,7 @@ import static android.os.Looper.getMainLooper;
 
 //TODO: keep everything in sync
 //TODO: cache entities
+//todo: add status indication to QAs
 public class FloatControlsAdvancedFragment extends Fragment {
 
     private HAUtils haUtils;
@@ -75,7 +76,7 @@ public class FloatControlsAdvancedFragment extends Fragment {
         haUtils = new HAUtils(this.getContext());
 
 
-        //TODO: also add other lights
+
         this.entities = new ArrayList<>();
         RecyclerView recyclerView = Objects.requireNonNull(getView()).findViewById(R.id.recyclerView_quickActions);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
@@ -160,6 +161,7 @@ public class FloatControlsAdvancedFragment extends Fragment {
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
+                            //todo: dont do this if HA-allready sent new state
                             updateLightState();
                         }
                     }
@@ -271,9 +273,6 @@ public class FloatControlsAdvancedFragment extends Fragment {
     public void updateEntityList() {
 
         entities.clear();
-//        getLightEntityList(this.getContext());
-//        getSceneEntityList(this.getContext());
-
 
         Callback callback = new Callback() {
             @Override
