@@ -1,7 +1,6 @@
 package de.wudke.lightswitch.floatControls;
 
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -44,6 +43,8 @@ import okhttp3.Response;
 
 import static android.os.Looper.getMainLooper;
 
+//TODO: keep everything in sync
+//TODO: cache entities
 public class FloatControlsAdvancedFragment extends Fragment {
 
     private HAUtils haUtils;
@@ -69,6 +70,7 @@ public class FloatControlsAdvancedFragment extends Fragment {
         haUtils = new HAUtils(this.getContext());
 
 
+        //TODO: also add other lights
         this.scenes = new ArrayList<>();
         RecyclerView recyclerView = Objects.requireNonNull(getView()).findViewById(R.id.recyclerView_quickActions);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
@@ -188,11 +190,11 @@ public class FloatControlsAdvancedFragment extends Fragment {
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this.getContext(), LinearLayoutManager.HORIZONTAL, false);
 
-        RecyclerView recyclerViewQuickActions = (RecyclerView) getView().findViewById(R.id.recyclerView_quickActions);
+        RecyclerView recyclerViewQuickActions = getView().findViewById(R.id.recyclerView_quickActions);
         recyclerViewQuickActions.setLayoutManager(layoutManager);
 
-        TextView entityLable = getView().findViewById(R.id.textView_entity_lable);
-        entityLable.setText(sharedpreferences.getString("HA_ENTITY", ""));
+        TextView entityLabel = getView().findViewById(R.id.textView_entity_label);
+        entityLabel.setText(sharedpreferences.getString("HA_ENTITY", ""));
 
         updateLightState();
     }

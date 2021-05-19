@@ -74,6 +74,7 @@ class ScenesAdapter extends RecyclerView.Adapter<ScenesAdapter.ViewHolder> {
                 haUtils.setScene(sceneEntity, callback);
             }
         });
+//        holder.myImageButton.setImageResource(R.drawable.ic_home_assistant);
     }
 
     // total number of rows

@@ -13,7 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import de.wudke.lightswitch.floatControls.FloatControlsActivity;
 
 public class MainActivity extends AppCompatActivity {
-
+    //TODO: complete overhaul
     private SharedPreferences sharedpreferences;
 
     @Override

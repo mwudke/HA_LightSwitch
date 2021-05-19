@@ -67,5 +67,6 @@
         android:onClick="debug"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/ic_launcher_foreground" />
+        android:tint="@color/white"
+        app:srcCompat="@drawable/ic_lightbulb_outline_black_24dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
