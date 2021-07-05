@@ -16,7 +16,7 @@ import de.wudke.lightswitch.HAUtils;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
-    //TODO: support all entities & display firendlyname
+    //TODO: support all entities & display friendly name
 public class LightSwitchTileService extends TileService {
 
     private int state = Tile.STATE_INACTIVE;
@@ -76,7 +76,7 @@ public class LightSwitchTileService extends TileService {
 
                     }
 
-                    //todo: dont do this if HA-allready sent new state
+                    //todo: don't do this if HA-already sent new state
                     callHAState();
                 }
             }

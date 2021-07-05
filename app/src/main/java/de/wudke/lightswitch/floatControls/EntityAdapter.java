@@ -27,11 +27,11 @@ import okhttp3.Response;
 
 class EntityAdapter extends RecyclerView.Adapter<EntityAdapter.ViewHolder> {
 
-    private List<Entity> mData;
-    private LayoutInflater mInflater;
+    private final List<Entity> mData;
+    private final LayoutInflater mInflater;
     private ItemClickListener mClickListener;
-    private Context context;
-    private HAUtils haUtils;
+    private final Context context;
+    private final HAUtils haUtils;
 
     // data is passed into the constructor
     EntityAdapter(Context context, List<Entity> data) {
@@ -43,8 +43,9 @@ class EntityAdapter extends RecyclerView.Adapter<EntityAdapter.ViewHolder> {
     }
 
     // inflates the row layout from xml when needed
+    @NotNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NotNull ViewGroup parent, int viewType) {
         View view = mInflater.inflate(R.layout.item_quickaction, parent, false);
         return new ViewHolder(view);
     }
@@ -65,8 +66,6 @@ class EntityAdapter extends RecyclerView.Adapter<EntityAdapter.ViewHolder> {
             public void onResponse(@NotNull Call call, final Response response) throws IOException {
                 if (!response.isSuccessful()) {
                     throw new IOException("Unexpected code " + response);
-                } else {
-
                 }
             }
         };
@@ -135,9 +134,9 @@ class EntityAdapter extends RecyclerView.Adapter<EntityAdapter.ViewHolder> {
 //    }
 
     // allows clicks events to be caught
-    void setClickListener(ItemClickListener itemClickListener) {
-        this.mClickListener = itemClickListener;
-    }
+//    void setClickListener(ItemClickListener itemClickListener) {
+//        this.mClickListener = itemClickListener;
+//    }
 
     // parent activity will implement this method to respond to click events
     public interface ItemClickListener {

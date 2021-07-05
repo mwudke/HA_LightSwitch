@@ -1,7 +1,6 @@
 package de.wudke.lightswitch.floatControls;
 
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -13,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -78,14 +76,14 @@ public class FloatControlsAdvancedFragment extends Fragment {
 
 
         this.entities = new ArrayList<>();
-        RecyclerView recyclerView = Objects.requireNonNull(getView()).findViewById(R.id.recyclerView_quickActions);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        RecyclerView recyclerViewQuickActions = Objects.requireNonNull(getView()).findViewById(R.id.recyclerView_quickActions);
+        recyclerViewQuickActions.setLayoutManager(new LinearLayoutManager(this.getContext()));
         entityAdapter = new EntityAdapter(this.getContext(), this.entities);
-        recyclerView.setAdapter(entityAdapter);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerViewQuickActions.setAdapter(entityAdapter);
+        recyclerViewQuickActions.setItemAnimator(new DefaultItemAnimator());
         updateEntityList();
         SnapHelper snapHelper = new LinearSnapHelper();
-        snapHelper.attachToRecyclerView(recyclerView);
+        snapHelper.attachToRecyclerView(recyclerViewQuickActions);
 
 
         final SeekBar brightnessSeekBar = Objects.requireNonNull(getView()).findViewById(R.id.brightness_seekBar);
@@ -161,7 +159,7 @@ public class FloatControlsAdvancedFragment extends Fragment {
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
-                            //todo: dont do this if HA-allready sent new state
+                            //todo: don't do this if HA-already sent new state
                             updateLightState();
                         }
                     }
@@ -184,7 +182,7 @@ public class FloatControlsAdvancedFragment extends Fragment {
         imageButtonOpenHA.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent launchIntent = getContext().getPackageManager().getLaunchIntentForPackage("io.homeassistant.companion.android");
+                Intent launchIntent = Objects.requireNonNull(getContext()).getPackageManager().getLaunchIntentForPackage("io.homeassistant.companion.android");
                 if (launchIntent != null) {
                     startActivity(launchIntent);
                 } else {
@@ -197,10 +195,9 @@ public class FloatControlsAdvancedFragment extends Fragment {
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this.getContext(), LinearLayoutManager.HORIZONTAL, false);
 
-        RecyclerView recyclerViewQuickActions = getView().findViewById(R.id.recyclerView_quickActions);
         recyclerViewQuickActions.setLayoutManager(layoutManager);
 
-        TextView entityLabel = getView().findViewById(R.id.textView_entity_label);
+        TextView entityLabel = Objects.requireNonNull(getView()).findViewById(R.id.textView_entity_label);
         entityLabel.setText(sharedpreferences.getString("HA_ENTITY", ""));
 
         updateLightState();

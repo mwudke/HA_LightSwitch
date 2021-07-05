@@ -91,7 +91,7 @@
         android:backgroundTint="@color/cardview_dark_background"
         android:requiresFadingEdge="none"
         android:scrollbarThumbVertical="@android:color/darker_gray"
-        android:scrollbars="horizontal"
+        android:scrollbars="none"
         app:layout_constraintBottom_toTopOf="@+id/imageButton_open_ha"
         app:layout_constraintEnd_toEndOf="@+id/brightness_seekBar"
         app:layout_constraintStart_toStartOf="@+id/imageButton_toggle_light"
