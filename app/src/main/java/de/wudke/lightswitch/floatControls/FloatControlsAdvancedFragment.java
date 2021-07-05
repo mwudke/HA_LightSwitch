@@ -74,7 +74,6 @@ public class FloatControlsAdvancedFragment extends Fragment {
         haUtils = new HAUtils(this.getContext());
 
 
-
         this.entities = new ArrayList<>();
         RecyclerView recyclerViewQuickActions = Objects.requireNonNull(getView()).findViewById(R.id.recyclerView_quickActions);
         recyclerViewQuickActions.setLayoutManager(new LinearLayoutManager(this.getContext()));
@@ -311,7 +310,12 @@ public class FloatControlsAdvancedFragment extends Fragment {
                                 int brightness = 0;
 
                                 if ("on".equals(entityState)) {
-                                    brightness = jEntity.getJSONObject("attributes").getInt("brightness");
+                                    if (jEntity.getJSONObject("attributes").has("brightness")) {
+                                        brightness = jEntity.getJSONObject("attributes").getInt("brightness");
+                                    } else {
+                                        brightness = 255;
+                                    }
+
                                 }
 
                                 LightEntities.add(new LightEntity(entityID, entityState, entityFriendlyName, brightness));
